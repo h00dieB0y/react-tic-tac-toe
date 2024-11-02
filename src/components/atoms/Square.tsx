@@ -1,5 +1,3 @@
-// src/components/atoms/Square.tsx
-
 import React, { KeyboardEvent } from "react";
 import styled from "styled-components";
 

@@ -1,12 +1,12 @@
 
 import './App.css'
-import Board from "./components/molecules/Board.tsx";
+import Game from "./components/organisms/Game.tsx";
 
 function App() {
 
   return (
     <>
-      <Board gridSize={4}/>
+      <Game />
     </>
   )
 }
