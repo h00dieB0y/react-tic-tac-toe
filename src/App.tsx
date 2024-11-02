@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      <Board size={3}/>
+      <Board gridSize={4}/>
     </>
   )
 }
