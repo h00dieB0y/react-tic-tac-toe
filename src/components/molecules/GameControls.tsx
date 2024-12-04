@@ -28,7 +28,7 @@ const GameControls: React.FC = () => {
                     return;
                 }
 
-                resetGame();
+                resetGame(gridSize, winCondition);
                 message.success("Game started!");
             })
             .catch((info) => {
@@ -104,7 +104,7 @@ const GameControls: React.FC = () => {
         </Col>
         <Col xs={24} sm={6}>
           <Form.Item>
-            <Button type="default" danger block onClick={resetGame}>
+            <Button type="default" danger block onClick={() => resetGame(gridSize, winCondition)}>
               Reset Game
             </Button>
           </Form.Item>

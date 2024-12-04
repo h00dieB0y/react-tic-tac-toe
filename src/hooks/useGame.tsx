@@ -10,7 +10,7 @@ interface UseGameProps {
     winCondition: number;
 }
 
-const useGameEngine = ({ gridSize, winCondition }: UseGameProps) => {
+const useGame = ({ gridSize, winCondition }: UseGameProps) => {
     const [gameState, setGameState] = useState<Game>(new Game(gridSize, winCondition));
     const [aiStrategy] = useState<AIStrategy>(new RandomAiStrategy());
 
@@ -68,7 +68,7 @@ const useGameEngine = ({ gridSize, winCondition }: UseGameProps) => {
         }
     }, [gameState]);
 
-    const resetGame = useCallback(() => {
+    const resetGame = useCallback((gridSize: number, winCondition: number) => {
         setGameState(new Game(gridSize, winCondition));
     }, [gridSize, winCondition]);
 
@@ -80,4 +80,4 @@ const useGameEngine = ({ gridSize, winCondition }: UseGameProps) => {
     };
 };
 
-export default useGameEngine;
+export default useGame;
