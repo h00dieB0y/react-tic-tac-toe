@@ -6,14 +6,13 @@ import { useGameContext } from '../../contexts/GameContext';
 
 const Board: React.FC = () => {
   const { gameState, handlePlayerMove } = useGameContext();
-  const SquareSize = 500 / gameState.gridSize;
 
   const renderSquare = (index: number) => {
     const isWinningSquare = gameState.currentWinningLine?.includes(index) || false;
     return (
       <Square
+        index={index}
         key={index}
-        size={SquareSize}
         value={gameState.squares[index]}
         onClick={() => handlePlayerMove(index)}
         isWinningSquare={isWinningSquare}
