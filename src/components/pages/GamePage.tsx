@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Board from "../molecules/Board.tsx";
-import {Button, Form, InputNumber, Select} from "antd";
+import { Button, Form, InputNumber, Select } from "antd";
 import useGameEngine from "../../hooks/useGameEngine";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Player } from "../../types/game";
 
 
@@ -50,7 +50,10 @@ const GamePage = () => {
                     />
                 </Form.Item>
                 <Form.Item label="Player">
-                    <Select defaultValue="X">
+                    <Select
+                        value={player}
+                        onChange={(value: Player) => setPlayer(value)}
+                    >
                         <Select.Option value="X">X</Select.Option>
                         <Select.Option value="O">O</Select.Option>
                     </Select>
