@@ -1,4 +1,4 @@
-import { PLAYER_X, PLAYER_O, Player, Game } from '../types/player';
+import { PLAYER_X, PLAYER_O, Player, Game } from '../types/game.d';
 import { AIStrategy, RandomAiStrategie } from './aiStrategie';
 
 interface GameEngineOptions {

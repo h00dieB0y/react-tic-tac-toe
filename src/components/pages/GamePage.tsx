@@ -4,7 +4,7 @@ import Board from "../molecules/Board";
 import { Button, Form, InputNumber, Select, message } from "antd";
 import {useGame} from "../../contexts/GameContext";
 import { useState, useEffect } from "react";
-import { Player, PLAYER_O, PLAYER_X } from "../../types/player";
+import { Player, PLAYER_O, PLAYER_X } from "../../types/game.d";
 
 const GamePage: React.FC = () => {
     const { gameState, winner, handleClick, startGame, iaMove, winningLine } = useGame();

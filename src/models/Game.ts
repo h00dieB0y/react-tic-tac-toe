@@ -20,15 +20,17 @@ export default class Game {
         this.currentWinningLine = null;
     }
 
-    makeMove(index: number): void {
+    makeMove(index: number): boolean {
         if (this.currentPlayer === null || this.squares[index] !== null || this.isOver()) {
-            return;
+            return false;
         }
 
         this.squares[index] = this.currentPlayer;
         this.currentPlayer = this.currentPlayer === Player.X ? Player.O : Player.X;
         this.lastMove = index;
         this.checkWinner();
+        
+        return true;
     }
 
     isOver(): boolean {
@@ -57,6 +59,15 @@ export default class Game {
                 return;
             }
         }
+    }
+
+    clone(): Game {
+        const game = new Game(this.gridSize, this.winCondition, this.currentPlayer);
+        game.squares = [...this.squares];
+        game.currentPlayer = this.currentPlayer;
+        game.lastMove = this.lastMove;
+        game.currentWinningLine = this.currentWinningLine;
+        return game;
     }
 
     private generateWinningLines(): number[][] {
