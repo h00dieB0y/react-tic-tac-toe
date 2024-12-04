@@ -8,7 +8,7 @@ export default class Game {
     winningLines: number[][];
     lastMove: number | null;
     currentWinningLine: number[] | null;
-    
+
 
     constructor(gridSize: number, winCondition: number, initialPlayer: PlayerType = Player.X) {
         this.squares = Array(gridSize * gridSize).fill(null);
@@ -29,7 +29,7 @@ export default class Game {
         this.currentPlayer = this.currentPlayer === Player.X ? Player.O : Player.X;
         this.lastMove = index;
         this.checkWinner();
-        
+
         return true;
     }
 
@@ -46,7 +46,7 @@ export default class Game {
 
         for (const line of relevantLines) {
             const firstSquare = this.squares[line[0]];
-            
+
             if (firstSquare === null) {
                 continue;
             }
@@ -71,40 +71,53 @@ export default class Game {
     }
 
     private generateWinningLines(): number[][] {
-        const winningLines = [];
 
-        for (let i = 0; i < this.gridSize; i++) {
-            for (let j = 0; j < this.gridSize; j++) {
-                const horizontalLine = [];
-                const verticalLine = [];
-                const diagonalLine = [];
-                const diagonalLine2 = [];
+        const lines: number[][] = [];
 
-                for (let k = 0; k < this.winCondition; k++) {
-                    horizontalLine.push(i * this.gridSize + j + k);
-                    verticalLine.push(j * this.gridSize + i + k);
-                    diagonalLine.push(i * this.gridSize + j + k * (this.gridSize + 1));
-                    diagonalLine2.push(i * this.gridSize + j + k * (this.gridSize - 1));
+        // Horizontal
+        for (let y = 0; y < this.gridSize; y++) {
+            for (let x = 0; x <= this.gridSize - this.winCondition; x++) {
+                const line = [];
+                for (let i = 0; i < this.winCondition; i++) {
+                    line.push(y * this.gridSize + x + i);
                 }
-
-                if (horizontalLine.length === this.winCondition) {
-                    winningLines.push(horizontalLine);
-                }
-
-                if (verticalLine.length === this.winCondition) {
-                    winningLines.push(verticalLine);
-                }
-
-                if (diagonalLine.length === this.winCondition) {
-                    winningLines.push(diagonalLine);
-                }
-
-                if (diagonalLine2.length === this.winCondition) {
-                    winningLines.push(diagonalLine2);
-                }
+                lines.push(line);
             }
         }
 
-        return winningLines;
+        // Vertical
+        for (let x = 0; x < this.gridSize; x++) {
+            for (let y = 0; y <= this.gridSize - this.winCondition; y++) {
+                const line = [];
+                for (let i = 0; i < this.winCondition; i++) {
+                    line.push((y + i) * this.gridSize + x);
+                }
+                lines.push(line);
+            }
+        }
+
+        // Diagonal (Top-Left to Bottom-Right)
+        for (let x = 0; x <= this.gridSize - this.winCondition; x++) {
+            for (let y = 0; y <= this.gridSize - this.winCondition; y++) {
+                const line = [];
+                for (let i = 0; i < this.winCondition; i++) {
+                    line.push((y + i) * this.gridSize + x + i);
+                }
+                lines.push(line);
+            }
+        }
+
+        // Diagonal (Top-Right to Bottom-Left)
+        for (let x = 0; x <= this.gridSize - this.winCondition; x++) {
+            for (let y = this.winCondition - 1; y < this.gridSize; y++) {
+                const line = [];
+                for (let i = 0; i < this.winCondition; i++) {
+                    line.push((y - i) * this.gridSize + x + i);
+                }
+                lines.push(line);
+            }
+        }
+
+        return lines;
     }
 }
