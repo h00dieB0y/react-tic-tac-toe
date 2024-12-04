@@ -1,7 +1,7 @@
 import { PLAYER_X, PLAYER_O, Player, Game } from '../types/game.d';
 
 interface GameEngine {
-    createGame: (gridSize: number, winCondition: number) => Game;
+    createGame: (gridSize: number, winCondition: number, initialPlayer?: Player) => Game;
     makeMove: (game: Game, index: number) => Game;
     isOver: (game: Game) => boolean;
     calculateWinner: (game: Game) => Player | null;
@@ -59,14 +59,15 @@ const generateWinningLines = (gridSize: number, winCondition: number): number[][
 };
 
 const gameEngine: GameEngine = {
-    createGame: (gridSize: number, winCondition: number): Game => ({
+    createGame: (gridSize: number, winCondition: number, initialPlayer: Player = PLAYER_X): Game => ({
         squares: Array(gridSize * gridSize).fill(null),
         gridSize,
-        currentPlayer: PLAYER_X,
+        currentPlayer: initialPlayer,
         winCondition,
         winningLines: generateWinningLines(gridSize, winCondition),
         lastMove: null,
     }),
+    
 
     makeMove: (game: Game, index: number): Game => {
         if (
@@ -127,4 +128,3 @@ const gameEngine: GameEngine = {
 };
 
 export default gameEngine;
-export { PLAYER_X, PLAYER_O };

@@ -33,8 +33,10 @@ const useGameEngine = ({ gridSize, winCondition }: UseGameEngineProps): UseGameE
     }
 
     const startGame = (playerSymbol: Player, gridSize: number, winCondition: number) => {
-        setGameState(gameEngine.createGame(gridSize, winCondition));
+        setGameState(gameEngine.createGame(gridSize, winCondition, playerSymbol));
+        setWinner(null);
     }
+    
 
     useEffect(() => {
         setWinner(gameEngine.calculateWinner(gameState));

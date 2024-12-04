@@ -1,32 +1,30 @@
+// src/components/pages/GamePage.tsx
 import styled from "styled-components";
-import Board from "../molecules/Board.tsx";
-import { Button, Form, InputNumber, Select } from "antd";
+import Board from "../molecules/Board";
+import { Button, Form, InputNumber, Select, message } from "antd";
 import useGameEngine from "../../hooks/useGameEngine";
 import { useState, useEffect } from "react";
-import { Player } from "../../types/game";
+import { Player, PLAYER_O } from "../../types/game";
 
-
-const GamePage = () => {
+const GamePage: React.FC = () => {
     const { gameState, winner, handleClick, startGame, iaMove } = useGameEngine({ gridSize: 3, winCondition: 3 });
-    const [gridSize, setGridSize] = useState(3);
-    const [winCondition, setWinCondition] = useState(3);
+    const [gridSize, setGridSize] = useState<number>(3);
+    const [winCondition, setWinCondition] = useState<number>(3);
     const [player, setPlayer] = useState<Player>("X");
 
     const onStartGame = () => {
         if (winCondition > gridSize) {
-            // Display an error message or disable the start button
+            message.error("Win condition cannot be greater than grid size.");
             return;
         }
         startGame(player, gridSize, winCondition);
     };
 
-    // Make the AI move
     useEffect(() => {
-        if (gameState.currentPlayer === "O") {
+        if (gameState.currentPlayer === PLAYER_O) {
             iaMove();
         }
-    }, [gameState.currentPlayer]);
-
+    }, [gameState.currentPlayer, iaMove]);
 
     return (
         <GameContainer>
@@ -76,7 +74,6 @@ const GamePage = () => {
         </GameContainer>
     );
 };
-
 
 const GameContainer = styled.div`
     display: flex;
