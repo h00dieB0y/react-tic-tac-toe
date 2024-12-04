@@ -52,7 +52,7 @@ const useGameEngine = ({ gridSize, winCondition }: UseGameProps) => {
 
             const timer = setTimeout(() => {
                 handleAIMove();
-            }, 500);
+            }, maxDelay);
 
             return () => clearTimeout(timer);
         }

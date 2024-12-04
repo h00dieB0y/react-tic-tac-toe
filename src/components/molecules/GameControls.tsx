@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import { useGameContext } from "../../contexts/GameContext";
 import { Button, Col, Form, InputNumber, message, Row, Select } from "antd";
-import { Player, PlayerType } from "../../types/player";
+import { Player } from "../../types/player";
 import styled from "styled-components";
 
 
@@ -88,7 +88,7 @@ const GameControls: React.FC = () => {
         </Col>
         <Col xs={24} sm={6}>
           <Form.Item label="AI Difficulty" name="aiDifficulty" initialValue={"random"}>
-            <Select onChange={(value: 'Random' | 'Defensive' | 'Minimax') => {}}>
+            <Select onChange={(value: 'Random' | 'Defensive' | 'Minimax') => {console.log(value)}}>
               <Select.Option value="Random">Random</Select.Option>
               <Select.Option value="Defensive">Defensive</Select.Option>
               <Select.Option value="Minimax">Minimax</Select.Option>
