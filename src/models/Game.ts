@@ -1,6 +1,6 @@
-import { Player, PlayerType } from "../../types/player";
+import { Player, PlayerType } from "../types/player";
 
-export class Game {
+export default class Game {
     squares: PlayerType[];
     gridSize: number;
     currentPlayer: PlayerType;
