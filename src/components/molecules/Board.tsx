@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Square from "../atoms/Square.tsx";
 import React from "react";
-import {Player} from "../../types/game";
+import {Player} from "../../types/player.ts";
 
 interface BoardProps {
     squares: Player[];

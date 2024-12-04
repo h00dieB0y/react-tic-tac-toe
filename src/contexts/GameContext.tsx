@@ -1,6 +1,6 @@
 import React, {createContext, useContext} from "react";
 import useGameEngine from "../hooks/useGameEngine";
-import {Game, Player} from "../types/game";
+import {Game, Player} from "../types/player";
 
 interface GameContextValue {
     gameState: Game;

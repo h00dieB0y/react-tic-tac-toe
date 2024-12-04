@@ -1,7 +1,9 @@
-export const PLAYER_X = "X";
-export const PLAYER_O = "O";
+export enum Player {
+    X = 'X',
+    O = 'O',
+}
 
-export type Player = typeof PLAYER_X | typeof PLAYER_O | null;
+export type PlayerType = Player.X | Player.O | null;
 
 export interface Game {
     squares: Player[];

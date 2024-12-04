@@ -1,4 +1,4 @@
-import {Game, Player} from "../types/game";
+import {Game, Player} from "../types/player";
 
 export interface AIStrategy {
     determineMove: (game: Game) => number;

@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Game, Player} from "../types/game";
+import {Game, Player} from "../types/player";
 import GameEngine from '../services/gameEngine';
 
 interface UseGameEngineProps {
