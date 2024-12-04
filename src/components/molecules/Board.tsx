@@ -1,17 +1,22 @@
 import styled from "styled-components";
 import Square from "../atoms/Square.tsx";
+import React from "react";
+import {Player} from "../../types/game";
 
+interface BoardProps {
+    squares: Player[];
+    gridSize: number;
+    onClick: (i: number) => void;
+}
 
-
-const Board = ({gridSize}: { gridSize: number }) => {
-    const squareSize = MAX_GRID_WIDTH / gridSize - 2;
-
+const Board: React.FC<BoardProps> = ({ squares, gridSize, onClick }) => {
+    const squareSize = MAX_GRID_WIDTH / gridSize;
     const renderSquare = (i: number) =>
-        <Square key={i} size={squareSize} value={Math.random() > 0.5 ? 'X' : 'O'} onClick={() => {}} />;
+        <Square key={i} size={squareSize} value={squares[i]} onClick={() => onClick(i)}/>;
 
     return (
         <BoardContainer size={gridSize} squareSize={squareSize}>
-            {Array.from({ length: gridSize * gridSize }, (_, i) => renderSquare(i))}
+            {squares.map((_, i) => renderSquare(i))}
         </BoardContainer>
     );
 };

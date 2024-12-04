@@ -1,12 +1,12 @@
 
 import './App.css'
-import Game from "./components/organisms/Game.tsx";
+import GamePage from "./components/pages/GamePage.tsx";
 
 function App() {
 
   return (
     <>
-      <Game />
+      <GamePage />
     </>
   )
 }
