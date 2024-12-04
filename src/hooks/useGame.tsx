@@ -1,9 +1,9 @@
 import {useEffect, useState, useCallback} from 'react';
 import {Player} from "../types/player";
 import Game from '../models/Game';
-import { AIStrategy } from '../services/aiStrategie';
 import { RandomAiStrategy } from '../services/ai/RandomAiStrategy';
 import { message } from 'antd';
+import { AIStrategy } from '../services/ai/AIStrategy';
 
 interface UseGameProps {
     gridSize: number;
