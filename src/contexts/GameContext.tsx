@@ -8,6 +8,7 @@ interface GameContextValue {
     handleClick: (i: number) => void;
     startGame: (playerSymbol: Player, gridSize: number, winCondition: number) => void;
     resetGame: () => void;
+    iaMove: () => void;
 }
 
 interface GameProviderProps {
@@ -17,10 +18,10 @@ interface GameProviderProps {
 const GameContext = createContext<GameContextValue | undefined>(undefined);
 
 export const GameProvider: React.FC<GameProviderProps> = ({children}) => {
-    const {gameState, winner, handleClick, startGame, resetGame} = useGameEngine({gridSize: 3, winCondition: 3});
+    const {gameState, winner, handleClick, startGame, resetGame, iaMove} = useGameEngine({gridSize: 3, winCondition: 3});
 
     return (
-        <GameContext.Provider value={{gameState, winner, handleClick, startGame, resetGame}}>
+        <GameContext.Provider value={{gameState, winner, handleClick, startGame, resetGame, iaMove}}>
             {children}
         </GameContext.Provider>
     );

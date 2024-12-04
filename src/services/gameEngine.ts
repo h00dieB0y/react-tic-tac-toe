@@ -1,11 +1,78 @@
 import { PLAYER_X, PLAYER_O, Player, Game } from '../types/game.d';
+import { AIStrategy, RandomAiStrategie } from './aiStrategie';
 
-interface GameEngine {
-    createGame: (gridSize: number, winCondition: number, initialPlayer?: Player) => Game;
-    makeMove: (game: Game, index: number) => Game;
-    isOver: (game: Game) => boolean;
-    calculateWinner: (game: Game) => Player | null;
-    iaMove: (game: Game) => number;
+interface GameEngineOptions {
+    aiStrategy?: AIStrategy;
+}
+
+class GameEngine {
+    private aiStrategy: AIStrategy;
+
+    constructor(options?: GameEngineOptions) {
+        this.aiStrategy = options?.aiStrategy || new RandomAiStrategie();
+    }
+
+    createGame(gridSize: number, winCondition: number, initialPlayer: Player = PLAYER_X): Game {
+        return {
+            squares: Array(gridSize * gridSize).fill(null),
+            gridSize,
+            currentPlayer: initialPlayer,
+            winCondition,
+            winningLines: generateWinningLines(gridSize, winCondition),
+            lastMove: null,
+        };
+    }
+
+    makeMove(game: Game, index: number): Game {
+        if (
+            game.currentPlayer === null ||
+            game.squares[index] !== null ||
+            this.isOver(game)
+        ) {
+            return game;
+        }
+
+        const newSquares = [...game.squares];
+        newSquares[index] = game.currentPlayer;
+        const newCurrentPlayer = game.currentPlayer === PLAYER_X ? PLAYER_O : PLAYER_X;
+
+        return {
+            ...game,
+            squares: newSquares,
+            currentPlayer: newCurrentPlayer,
+            lastMove: index,
+        };
+    }
+
+    isOver(game: Game): boolean {
+        return this.calculateWinner(game) !== null || game.squares.every(square => square !== null);
+    }
+
+    calculateWinner(game: Game): Player | null {
+        const { winningLines, lastMove, squares } = game;
+
+        if (lastMove === null) return null;
+
+        // Find all lines that include the last move
+        const relevantLines = winningLines.filter(line => line.includes(lastMove));
+
+        for (const line of relevantLines) {
+            const [firstIndex, ...restIndices] = line;
+            const firstPlayer = squares[firstIndex];
+            if (firstPlayer === null) continue;
+
+            const isWinningLine = restIndices.every(index => squares[index] === firstPlayer);
+            if (isWinningLine) {
+                return firstPlayer;
+            }
+        }
+
+        return null;
+    }
+
+    iaMove(game: Game): number {
+        return this.aiStrategy.determineMove(game);
+    }
 }
 
 const generateWinningLines = (gridSize: number, winCondition: number): number[][] => {
@@ -58,73 +125,4 @@ const generateWinningLines = (gridSize: number, winCondition: number): number[][
     return lines;
 };
 
-const gameEngine: GameEngine = {
-    createGame: (gridSize: number, winCondition: number, initialPlayer: Player = PLAYER_X): Game => ({
-        squares: Array(gridSize * gridSize).fill(null),
-        gridSize,
-        currentPlayer: initialPlayer,
-        winCondition,
-        winningLines: generateWinningLines(gridSize, winCondition),
-        lastMove: null,
-    }),
-    
-
-    makeMove: (game: Game, index: number): Game => {
-        if (
-            game.currentPlayer === null ||
-            game.squares[index] !== null ||
-            gameEngine.isOver(game)
-        ) {
-            return game;
-        }
-
-        const newSquares = [...game.squares];
-        newSquares[index] = game.currentPlayer;
-        const newCurrentPlayer = game.currentPlayer === PLAYER_X ? PLAYER_O : PLAYER_X;
-
-        return {
-            ...game,
-            squares: newSquares,
-            currentPlayer: newCurrentPlayer,
-            lastMove: index,
-        };
-    },
-
-    isOver: (game: Game): boolean => {
-        return gameEngine.calculateWinner(game) !== null || game.squares.every(square => square !== null);
-    },
-
-    calculateWinner: (game: Game): Player | null => {
-        const { winningLines, lastMove, squares } = game;
-
-        if (lastMove === null) return null;
-
-        // Find all lines that include the last move
-        const relevantLines = winningLines.filter(line => line.includes(lastMove));
-
-        for (const line of relevantLines) {
-            const [firstIndex, ...restIndices] = line;
-            const firstPlayer = squares[firstIndex];
-            if (firstPlayer === null) continue;
-
-            const isWinningLine = restIndices.every(index => squares[index] === firstPlayer);
-            if (isWinningLine) {
-                return firstPlayer;
-            }
-        }
-
-        return null;
-    },
-
-    iaMove: (game: Game): number => {
-        // Random available move
-        const availableMoves = game.squares
-            .map((square, index) => (square === null ? index : null))
-            .filter(index => index !== null) as number[];
-        
-        return availableMoves[Math.floor(Math.random() * availableMoves.length)];
-    }
-
-};
-
-export default gameEngine;
+export default GameEngine;

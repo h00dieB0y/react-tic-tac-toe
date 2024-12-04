@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import gameEngine from "../services/gameEngine";
 import {Game, Player} from "../types/game";
+import GameEngine from '../services/gameEngine';
 
 interface UseGameEngineProps {
     gridSize: number;
@@ -17,19 +18,25 @@ interface UseGameEngineReturn {
 }
 
 const useGameEngine = ({ gridSize, winCondition }: UseGameEngineProps): UseGameEngineReturn => {
+    const [gameEngine] = useState(new GameEngine());
     const [gameState, setGameState] = useState(gameEngine.createGame(gridSize, winCondition));
     const [winner, setWinner] = useState<Player | null>(null);
 
     const handleClick = (i: number) => {
-        setGameState((game) => gameEngine.makeMove(game, i));
+        const updatedGame = gameEngine.makeMove(gameState, i);
+        setGameState(updatedGame);
     }
 
     const iaMove = () => {
-        setGameState((game) => gameEngine.makeMove(game, gameEngine.iaMove(game)));
+        const iaIndex = gameEngine.iaMove(gameState);
+        
+        const updatedGame = gameEngine.makeMove(gameState, iaIndex);
+        setGameState(updatedGame);
     }
 
     const resetGame = () => {
         setGameState(gameEngine.createGame(gridSize, winCondition));
+        setWinner(null);
     }
 
     const startGame = (playerSymbol: Player, gridSize: number, winCondition: number) => {
@@ -40,7 +47,7 @@ const useGameEngine = ({ gridSize, winCondition }: UseGameEngineProps): UseGameE
 
     useEffect(() => {
         setWinner(gameEngine.calculateWinner(gameState));
-    }, [gameState]);
+    }, [gameState, gameEngine]);
 
     return { gameState, winner, handleClick, resetGame, startGame, iaMove };
 };

@@ -2,21 +2,27 @@
 import styled from "styled-components";
 import Board from "../molecules/Board";
 import { Button, Form, InputNumber, Select, message } from "antd";
-import useGameEngine from "../../hooks/useGameEngine";
+import {useGame} from "../../contexts/GameContext";
 import { useState, useEffect } from "react";
-import { Player, PLAYER_O } from "../../types/game";
+import { Player, PLAYER_O, PLAYER_X } from "../../types/game.d";
 
 const GamePage: React.FC = () => {
-    const { gameState, winner, handleClick, startGame, iaMove } = useGameEngine({ gridSize: 3, winCondition: 3 });
+    const { gameState, winner, handleClick, startGame, iaMove } = useGame();
     const [gridSize, setGridSize] = useState<number>(3);
     const [winCondition, setWinCondition] = useState<number>(3);
-    const [player, setPlayer] = useState<Player>("X");
+    const [player, setPlayer] = useState<Player>(PLAYER_X);
 
     const onStartGame = () => {
         if (winCondition > gridSize) {
             message.error("Win condition cannot be greater than grid size.");
             return;
         }
+
+        if (winCondition < 3 || gridSize < 3) {
+            message.error("Grid size and win condition must be at least 3.");
+            return;
+        }
+
         startGame(player, gridSize, winCondition);
     };
 
@@ -24,7 +30,7 @@ const GamePage: React.FC = () => {
         if (gameState.currentPlayer === PLAYER_O) {
             iaMove();
         }
-    }, [gameState.currentPlayer, iaMove]);
+    }, [gameState.currentPlayer, gameState.lastMove, handleClick]);
 
     return (
         <GameContainer>
