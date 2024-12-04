@@ -1,45 +1,47 @@
-import styled from "styled-components";
-import Square from "../atoms/Square.tsx";
-import React from "react";
-import {Player} from "../../types/game";
+// src/components/molecules/Board.tsx
+import React from 'react';
+import styled from 'styled-components';
+import Square from '../atoms/Square';
+import { useGameContext } from '../../contexts/GameContext';
 
-interface BoardProps {
-    squares: Player[];
-    gridSize: number;
-    winningLine: number[] | null;
-    onClick: (i: number) => void;
-}
+const Board: React.FC = () => {
+  const { gameState, handlePlayerMove } = useGameContext();
+  const SquareSize = 500 / gameState.gridSize;
 
-const Board: React.FC<BoardProps> = ({ squares, gridSize, winningLine, onClick }) => {
-    const squareSize = MAX_GRID_WIDTH / gridSize;
-    const renderSquare = (i: number) => {
-        const isWinningSquare = winningLine?.includes(i);
-
-        return(
-            <Square key={i} size={squareSize} value={squares[i]} onClick={() => onClick(i)} isWinningSquare={isWinningSquare} />
-        );
-    }
-
+  const renderSquare = (index: number) => {
+    const isWinningSquare = gameState.currentWinningLine?.includes(index) || false;
     return (
-        <BoardContainer size={gridSize} squareSize={squareSize}>
-            {squares.map((_, i) => renderSquare(i))}
-        </BoardContainer>
+      <Square
+        key={index}
+        size={SquareSize}
+        value={gameState.squares[index]}
+        onClick={() => handlePlayerMove(index)}
+        isWinningSquare={isWinningSquare}
+      />
     );
+ };
+
+  const squares = Array.from({ length: gameState.gridSize * gameState.gridSize }, (_, i) => renderSquare(i));
+
+  return <BoardContainer gridSize={gameState.gridSize}>{squares}</BoardContainer>;
 };
 
-const MAX_GRID_WIDTH = 500;
+const BoardContainer = styled.div<{ gridSize: number }>`
+  display: grid;
+  grid-template-columns: repeat(${props => props.gridSize}, 1fr);
+  grid-template-rows: repeat(${props => props.gridSize}, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 18px;
 
-const BoardContainer = styled.div<{ size: number; squareSize: number }>`
-    display: grid;
-    grid-template-columns: repeat(${props => props.size}, ${props => props.squareSize}px);
-    grid-template-rows: repeat(${props => props.size}, ${props => props.squareSize}px);
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 18px;
+  @media (max-width: 600px) {
+    max-width: 90vw;
+  }
 `;
 
 export default Board;
