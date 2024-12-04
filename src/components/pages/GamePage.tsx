@@ -2,12 +2,12 @@
 import styled from "styled-components";
 import Board from "../molecules/Board";
 import { Button, Form, InputNumber, Select, message } from "antd";
-import {useGame} from "../../contexts/GameContext";
+import {useGameContext} from "../../contexts/GameContext";
 import { useState, useEffect } from "react";
 import { Player, PLAYER_O, PLAYER_X } from "../../types/game.d";
 
 const GamePage: React.FC = () => {
-    const { gameState, winner, handleClick, startGame, iaMove, winningLine } = useGame();
+    const { gameState, winner, handleClick, startGame, iaMove, winningLine } = useGameContext();
     const [gridSize, setGridSize] = useState<number>(3);
     const [winCondition, setWinCondition] = useState<number>(3);
     const [player, setPlayer] = useState<Player>(PLAYER_X);
