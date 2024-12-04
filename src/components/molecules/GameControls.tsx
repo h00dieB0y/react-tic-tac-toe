@@ -17,7 +17,7 @@ const GameControls: React.FC = () => {
     const onStartGame = () => {
         form
             .validateFields()
-            .then((values) => {
+            .then((_values) => {
                 if (winCondition > gridSize) {
                     message.error("Win condition cannot be greater than grid size.");
                     return;
