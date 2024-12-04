@@ -5,9 +5,10 @@ interface SquareProps {
     size: number;
     value: "X" | "O" | null;
     onClick: () => void;
+    isWinningSquare?: boolean;
 }
 
-const Square: React.FC<SquareProps> = React.memo(({ size, value, onClick }) => {
+const Square: React.FC<SquareProps> = React.memo(({ size, value, onClick, isWinningSquare }) => {
     const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
         if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
@@ -27,6 +28,7 @@ const Square: React.FC<SquareProps> = React.memo(({ size, value, onClick }) => {
             aria-pressed={value !== null}
             aria-disabled={value !== null}
             data-disabled={value !== null}
+            isWinningSquare={isWinningSquare}
         >
             {value}
         </SquareDiv>
@@ -39,10 +41,11 @@ const Square: React.FC<SquareProps> = React.memo(({ size, value, onClick }) => {
 const SquareDiv = styled.div<{
     size: number;
     value: "X" | "O" | null;
+    isWinningSquare?: boolean;
 }>`
     width: ${(props) => props.size}px;
     height: ${(props) => props.size}px;
-    background-color: #fff;
+    background-color: ${(props) => (props.isWinningSquare ? "#ffeb3b" : "#fff")};
     border-radius: 8px;
     border: 2px solid #ccc;
     display: flex;
@@ -78,7 +81,7 @@ const SquareDiv = styled.div<{
     &[aria-disabled="true"] {
         cursor: not-allowed;
         opacity: 0.6;
-        background-color: #fff;
+        background-color: ${(props) => (props.isWinningSquare ? "#ffeb3b" : "#fff")};
     }
 `;
 

@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { Player, PLAYER_O, PLAYER_X } from "../../types/game.d";
 
 const GamePage: React.FC = () => {
-    const { gameState, winner, handleClick, startGame, iaMove } = useGame();
+    const { gameState, winner, handleClick, startGame, iaMove, winningLine } = useGame();
     const [gridSize, setGridSize] = useState<number>(3);
     const [winCondition, setWinCondition] = useState<number>(3);
     const [player, setPlayer] = useState<Player>(PLAYER_X);
@@ -31,6 +31,12 @@ const GamePage: React.FC = () => {
             iaMove();
         }
     }, [gameState.currentPlayer, gameState.lastMove, handleClick]);
+
+    useEffect(() => {
+        if (winner) {
+            message.success(`Player ${winner} wins!`);
+        }
+    }, [winner]);
 
     return (
         <GameContainer>
@@ -71,6 +77,7 @@ const GamePage: React.FC = () => {
                     gridSize={gameState.gridSize}
                     squares={gameState.squares}
                     onClick={handleClick}
+                    winningLine={winningLine}
                 />
             </GameBoard>
             <GameInfo>

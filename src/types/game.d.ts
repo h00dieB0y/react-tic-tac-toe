@@ -10,4 +10,5 @@ export interface Game {
     winCondition: number;
     winningLines: number[][];
     lastMove: number | null;
+    currentWinningLine: number[] | null;
 }

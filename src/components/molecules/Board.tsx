@@ -6,13 +6,19 @@ import {Player} from "../../types/game";
 interface BoardProps {
     squares: Player[];
     gridSize: number;
+    winningLine: number[] | null;
     onClick: (i: number) => void;
 }
 
-const Board: React.FC<BoardProps> = ({ squares, gridSize, onClick }) => {
+const Board: React.FC<BoardProps> = ({ squares, gridSize, winningLine, onClick }) => {
     const squareSize = MAX_GRID_WIDTH / gridSize;
-    const renderSquare = (i: number) =>
-        <Square key={i} size={squareSize} value={squares[i]} onClick={() => onClick(i)}/>;
+    const renderSquare = (i: number) => {
+        const isWinningSquare = winningLine?.includes(i);
+
+        return(
+            <Square key={i} size={squareSize} value={squares[i]} onClick={() => onClick(i)} isWinningSquare={isWinningSquare} />
+        );
+    }
 
     return (
         <BoardContainer size={gridSize} squareSize={squareSize}>

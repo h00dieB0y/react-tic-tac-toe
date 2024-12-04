@@ -15,12 +15,15 @@ interface UseGameEngineReturn {
     startGame: (playerSymbol: Player, gridSize: number, winCondition: number) => void;
     resetGame: () => void;
     iaMove: () => void;
+    winningLine: number[] | null;
+
 }
 
 const useGameEngine = ({ gridSize, winCondition }: UseGameEngineProps): UseGameEngineReturn => {
     const [gameEngine] = useState(new GameEngine());
     const [gameState, setGameState] = useState(gameEngine.createGame(gridSize, winCondition));
     const [winner, setWinner] = useState<Player | null>(null);
+    const [winningLine, setWinningLine] = useState<number[] | null>(null);
 
     const handleClick = (i: number) => {
         const updatedGame = gameEngine.makeMove(gameState, i);
@@ -37,19 +40,23 @@ const useGameEngine = ({ gridSize, winCondition }: UseGameEngineProps): UseGameE
     const resetGame = () => {
         setGameState(gameEngine.createGame(gridSize, winCondition));
         setWinner(null);
+        setWinningLine(null);
     }
 
     const startGame = (playerSymbol: Player, gridSize: number, winCondition: number) => {
         setGameState(gameEngine.createGame(gridSize, winCondition, playerSymbol));
         setWinner(null);
+        setWinningLine(null);
     }
     
 
     useEffect(() => {
-        setWinner(gameEngine.calculateWinner(gameState));
+        const { winner, winningLine } = gameEngine.calculateWinner(gameState);
+        setWinner(winner);
+        setWinningLine(winningLine);
     }, [gameState, gameEngine]);
 
-    return { gameState, winner, handleClick, resetGame, startGame, iaMove };
+    return { gameState, winner, handleClick, resetGame, startGame, iaMove, winningLine };
 };
 
 export default useGameEngine;

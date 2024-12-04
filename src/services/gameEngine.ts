@@ -19,6 +19,7 @@ class GameEngine {
             currentPlayer: initialPlayer,
             winCondition,
             winningLines: generateWinningLines(gridSize, winCondition),
+            currentWinningLine: null,
             lastMove: null,
         };
     }
@@ -45,13 +46,14 @@ class GameEngine {
     }
 
     isOver(game: Game): boolean {
-        return this.calculateWinner(game) !== null || game.squares.every(square => square !== null);
+        const { winner } = this.calculateWinner(game);
+        return winner !== null || game.squares.every(square => square !== null);
     }
 
-    calculateWinner(game: Game): Player | null {
+    calculateWinner(game: Game): { winner: Player | null; winningLine: number[] | null } {
         const { winningLines, lastMove, squares } = game;
 
-        if (lastMove === null) return null;
+        if (lastMove === null) return { winner: null, winningLine: null };
 
         // Find all lines that include the last move
         const relevantLines = winningLines.filter(line => line.includes(lastMove));
@@ -63,11 +65,11 @@ class GameEngine {
 
             const isWinningLine = restIndices.every(index => squares[index] === firstPlayer);
             if (isWinningLine) {
-                return firstPlayer;
+                return { winner: firstPlayer, winningLine: line };
             }
         }
 
-        return null;
+        return { winner: null, winningLine: null };
     }
 
     iaMove(game: Game): number {
