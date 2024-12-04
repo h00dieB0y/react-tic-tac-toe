@@ -75,6 +75,7 @@ const useGameEngine = ({ gridSize, winCondition }: UseGameProps) => {
     return {
         gameState,
         handlePlayerMove,
+        handleAIMove,
         resetGame,
     };
 };
